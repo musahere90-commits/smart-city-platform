@@ -26,23 +26,27 @@ export class UsersService {
       throw new BadRequestException('Email already exists');
     }
 
-    // Hash the password
+    // Hash password
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
       10,
     );
 
-    // Create a new user
+    // Create new user
     const newUser = new this.userModel({
       ...createUserDto,
       password: hashedPassword,
     });
 
-    // Save user to MongoDB
+    // Save user
     return newUser.save();
   }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).exec();
   }
 }
