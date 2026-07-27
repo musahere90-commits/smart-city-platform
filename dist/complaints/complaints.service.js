@@ -12,45 +12,31 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
+exports.ComplaintsService = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-const bcrypt = require("bcrypt");
-const user_schema_1 = require("./schemas/user.schema");
-let UsersService = class UsersService {
-    constructor(userModel) {
-        this.userModel = userModel;
+const complaint_schema_1 = require("./schemas/complaint.schema");
+let ComplaintsService = class ComplaintsService {
+    constructor(complaintModel) {
+        this.complaintModel = complaintModel;
     }
-    async create(createUserDto) {
-        const existingUser = await this.userModel.findOne({
-            email: createUserDto.email,
+    async create(createComplaintDto, userId) {
+        const complaint = new this.complaintModel({
+            ...createComplaintDto,
+            userId: new mongoose_2.Types.ObjectId(userId),
+            status: 'Pending',
         });
-        if (existingUser) {
-            throw new common_1.BadRequestException('Email already exists');
-        }
-        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-        const newUser = new this.userModel({
-            ...createUserDto,
-            password: hashedPassword,
-        });
-        return newUser.save();
+        return complaint.save();
     }
     async findAll() {
-        return this.userModel
-            .find()
-            .exec();
-    }
-    async findByEmail(email) {
-        return this.userModel
-            .findOne({ email })
-            .exec();
+        return this.complaintModel.find().populate('userId').exec();
     }
 };
-exports.UsersService = UsersService;
-exports.UsersService = UsersService = __decorate([
+exports.ComplaintsService = ComplaintsService;
+exports.ComplaintsService = ComplaintsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __param(0, (0, mongoose_1.InjectModel)(complaint_schema_1.Complaint.name)),
     __metadata("design:paramtypes", [mongoose_2.Model])
-], UsersService);
-//# sourceMappingURL=users.service.js.map
+], ComplaintsService);
+//# sourceMappingURL=complaints.service.js.map

@@ -12,37 +12,43 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = void 0;
+exports.ComplaintsController = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("./users.service");
-const create_user_dto_1 = require("./dto/create-user.dto");
-let UsersController = class UsersController {
-    constructor(usersService) {
-        this.usersService = usersService;
+const swagger_1 = require("@nestjs/swagger");
+const complaints_service_1 = require("./complaints.service");
+const create_complaint_dto_1 = require("./dto/create-complaint.dto");
+const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+let ComplaintsController = class ComplaintsController {
+    constructor(complaintsService) {
+        this.complaintsService = complaintsService;
     }
-    create(createUserDto) {
-        return this.usersService.create(createUserDto);
+    create(createComplaintDto, req) {
+        return this.complaintsService.create(createComplaintDto, req.user.userId);
     }
     findAll() {
-        return this.usersService.findAll();
+        return this.complaintsService.findAll();
     }
 };
-exports.UsersController = UsersController;
+exports.ComplaintsController = ComplaintsController;
 __decorate([
-    (0, common_1.Post)('register'),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [create_complaint_dto_1.CreateComplaintDto, Object]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "create", null);
+], ComplaintsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "findAll", null);
-exports.UsersController = UsersController = __decorate([
-    (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
-], UsersController);
-//# sourceMappingURL=users.controller.js.map
+], ComplaintsController.prototype, "findAll", null);
+exports.ComplaintsController = ComplaintsController = __decorate([
+    (0, swagger_1.ApiTags)('Complaints'),
+    (0, swagger_1.ApiBearerAuth)('JWT-auth'),
+    (0, common_1.Controller)('complaints'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __metadata("design:paramtypes", [complaints_service_1.ComplaintsService])
+], ComplaintsController);
+//# sourceMappingURL=complaints.controller.js.map

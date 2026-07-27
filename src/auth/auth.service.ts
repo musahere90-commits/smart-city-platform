@@ -20,16 +20,23 @@ export class AuthService {
       loginDto.email,
     );
 
+    console.log('User from DB:', user);
+
     if (!user) {
       throw new UnauthorizedException(
         'Invalid email or password',
       );
     }
 
+    console.log('Password entered:', loginDto.password);
+    console.log('Password in DB:', user.password);
+
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
     );
+
+    console.log('Password Match:', isPasswordValid);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException(
