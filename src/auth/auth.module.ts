@@ -5,15 +5,14 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy/jwt.strategy';
+import { RolesGuard } from './roles.guard';
 import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     UsersModule,
 
-    PassportModule.register({
-      defaultStrategy: 'jwt',
-    }),
+    PassportModule,
 
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'smartcity123',
@@ -25,8 +24,15 @@ import { UsersModule } from '../users/users.module';
 
   controllers: [AuthController],
 
-  providers: [AuthService, JwtStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RolesGuard,
+  ],
 
-  exports: [PassportModule, JwtModule],
+  exports: [
+    JwtModule,
+    PassportModule,
+  ],
 })
 export class AuthModule {}

@@ -13,6 +13,7 @@ const passport_1 = require("@nestjs/passport");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const jwt_strategy_1 = require("./jwt.strategy/jwt.strategy");
+const roles_guard_1 = require("./roles.guard");
 const users_module_1 = require("../users/users.module");
 let AuthModule = class AuthModule {
 };
@@ -21,9 +22,7 @@ exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             users_module_1.UsersModule,
-            passport_1.PassportModule.register({
-                defaultStrategy: 'jwt',
-            }),
+            passport_1.PassportModule,
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET || 'smartcity123',
                 signOptions: {
@@ -32,8 +31,15 @@ exports.AuthModule = AuthModule = __decorate([
             }),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
-        exports: [passport_1.PassportModule, jwt_1.JwtModule],
+        providers: [
+            auth_service_1.AuthService,
+            jwt_strategy_1.JwtStrategy,
+            roles_guard_1.RolesGuard,
+        ],
+        exports: [
+            jwt_1.JwtModule,
+            passport_1.PassportModule,
+        ],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

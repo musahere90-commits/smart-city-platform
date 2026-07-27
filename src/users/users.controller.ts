@@ -12,7 +12,10 @@ import {
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+
 import { JwtGuard } from '../auth/jwt/jwt.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -26,9 +29,10 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(JwtGuard)
-  @ApiBearerAuth('JWT-auth')
   @Get()
+  @UseGuards(JwtGuard, RolesGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Roles('admin')
   findAll() {
     return this.usersService.findAll();
   }
