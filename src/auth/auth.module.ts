@@ -1,20 +1,32 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersModule } from '../users/users.module';
+import { PassportModule } from '@nestjs/passport';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategy } from './jwt.strategy/jwt.strategy';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     UsersModule,
+
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+    }),
+
     JwtModule.register({
-      secret: 'smartcity-secret-key',
+      secret: process.env.JWT_SECRET || 'smartcity123',
       signOptions: {
         expiresIn: '1d',
       },
     }),
   ],
+
   controllers: [AuthController],
-  providers: [AuthService],
+
+  providers: [AuthService, JwtStrategy],
+
+  exports: [PassportModule, JwtModule],
 })
 export class AuthModule {}

@@ -15,6 +15,11 @@ async function bootstrap() {
         .setTitle('Smart City API')
         .setDescription('Enterprise Smart City Operations API')
         .setVersion('1.0')
+        .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+    }, 'JWT-auth')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);

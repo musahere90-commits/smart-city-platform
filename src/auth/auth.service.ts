@@ -16,7 +16,6 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    // Find user by email
     const user = await this.usersService.findByEmail(
       loginDto.email,
     );
@@ -27,7 +26,6 @@ export class AuthService {
       );
     }
 
-    // Compare password
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -39,8 +37,8 @@ export class AuthService {
       );
     }
 
-    // JWT Payload
     const payload = {
+      sub: (user as any)._id,
       email: user.email,
       role: user.role,
     };
