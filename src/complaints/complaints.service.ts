@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -16,6 +19,7 @@ export class ComplaintsService {
     private complaintModel: Model<ComplaintDocument>,
   ) {}
 
+  // Create Complaint
   async create(
     createComplaintDto: CreateComplaintDto,
     userId: string,
@@ -29,7 +33,26 @@ export class ComplaintsService {
     return complaint.save();
   }
 
+  // Get All Complaints
   async findAll(): Promise<Complaint[]> {
     return this.complaintModel.find().populate('userId').exec();
+  }
+
+  // Update Complaint Status
+  async updateStatus(
+    id: string,
+    status: string,
+  ): Promise<Complaint | null> {
+    const complaint = await this.complaintModel.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true },
+    );
+
+    if (!complaint) {
+      throw new NotFoundException('Complaint not found');
+    }
+
+    return complaint;
   }
 }

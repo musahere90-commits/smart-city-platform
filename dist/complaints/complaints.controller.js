@@ -17,7 +17,10 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const complaints_service_1 = require("./complaints.service");
 const create_complaint_dto_1 = require("./dto/create-complaint.dto");
+const update_status_dto_1 = require("./dto/update-status.dto");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+const roles_guard_1 = require("../auth/roles.guard");
+const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 let ComplaintsController = class ComplaintsController {
     constructor(complaintsService) {
         this.complaintsService = complaintsService;
@@ -27,6 +30,9 @@ let ComplaintsController = class ComplaintsController {
     }
     findAll() {
         return this.complaintsService.findAll();
+    }
+    updateStatus(id, updateStatusDto) {
+        return this.complaintsService.updateStatus(id, updateStatusDto.status);
     }
 };
 exports.ComplaintsController = ComplaintsController;
@@ -44,6 +50,16 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ComplaintsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Patch)(':id/status'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_status_dto_1.UpdateStatusDto]),
+    __metadata("design:returntype", void 0)
+], ComplaintsController.prototype, "updateStatus", null);
 exports.ComplaintsController = ComplaintsController = __decorate([
     (0, swagger_1.ApiTags)('Complaints'),
     (0, swagger_1.ApiBearerAuth)('JWT-auth'),

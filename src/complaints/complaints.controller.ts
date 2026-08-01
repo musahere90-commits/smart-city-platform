@@ -2,9 +2,11 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Body,
   UseGuards,
   Req,
+  Param,
 } from '@nestjs/common';
 
 import {
@@ -14,7 +16,11 @@ import {
 
 import { ComplaintsService } from './complaints.service';
 import { CreateComplaintDto } from './dto/create-complaint.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
+
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('Complaints')
 @ApiBearerAuth('JWT-auth')
@@ -39,5 +45,18 @@ export class ComplaintsController {
   @Get()
   findAll() {
     return this.complaintsService.findAll();
+  }
+
+  @Patch(':id/status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  updateStatus(
+    @Param('id') id: string,
+    @Body() updateStatusDto: UpdateStatusDto,
+  ) {
+    return this.complaintsService.updateStatus(
+      id,
+      updateStatusDto.status,
+    );
   }
 }

@@ -32,6 +32,13 @@ let ComplaintsService = class ComplaintsService {
     async findAll() {
         return this.complaintModel.find().populate('userId').exec();
     }
+    async updateStatus(id, status) {
+        const complaint = await this.complaintModel.findByIdAndUpdate(id, { status }, { new: true });
+        if (!complaint) {
+            throw new common_1.NotFoundException('Complaint not found');
+        }
+        return complaint;
+    }
 };
 exports.ComplaintsService = ComplaintsService;
 exports.ComplaintsService = ComplaintsService = __decorate([

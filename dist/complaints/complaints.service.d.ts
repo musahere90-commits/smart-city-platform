@@ -6,4 +6,5 @@ export declare class ComplaintsService {
     constructor(complaintModel: Model<ComplaintDocument>);
     create(createComplaintDto: CreateComplaintDto, userId: string): Promise<Complaint>;
     findAll(): Promise<Complaint[]>;
+    updateStatus(id: string, status: string): Promise<Complaint | null>;
 }
