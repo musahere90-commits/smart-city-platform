@@ -35,11 +35,16 @@ let ComplaintsService = class ComplaintsService {
             .populate('userId')
             .exec();
     }
-    async findMyComplaints(userId) {
+    async filterComplaints(filterDto) {
+        const { status } = filterDto;
+        if (status) {
+            return this.complaintModel
+                .find({ status })
+                .populate('userId')
+                .exec();
+        }
         return this.complaintModel
-            .find({
-            userId: new mongoose_2.Types.ObjectId(userId),
-        })
+            .find()
             .populate('userId')
             .exec();
     }
@@ -49,6 +54,14 @@ let ComplaintsService = class ComplaintsService {
             throw new common_1.NotFoundException('Complaint not found');
         }
         return complaint;
+    }
+    async findMyComplaints(userId) {
+        return this.complaintModel
+            .find({
+            userId: new mongoose_2.Types.ObjectId(userId),
+        })
+            .populate('userId')
+            .exec();
     }
 };
 exports.ComplaintsService = ComplaintsService;

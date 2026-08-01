@@ -7,6 +7,7 @@ import {
   UseGuards,
   Req,
   Param,
+  Query,
 } from '@nestjs/common';
 
 import {
@@ -17,6 +18,7 @@ import {
 import { ComplaintsService } from './complaints.service';
 import { CreateComplaintDto } from './dto/create-complaint.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
+import { FilterComplaintsDto } from './dto/filter-complaints.dto';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -43,17 +45,19 @@ export class ComplaintsController {
     );
   }
 
-  // Get All Complaints
+  // Get All Complaints (with optional status filter)
   @Get()
-  findAll() {
-    return this.complaintsService.findAll();
+  findAll(
+    @Query() filterDto: FilterComplaintsDto,
+  ) {
+    return this.complaintsService.filterComplaints(
+      filterDto,
+    );
   }
 
   // Get Logged-in User Complaints
   @Get('my')
-  findMyComplaints(
-    @Req() req: any,
-  ) {
+  findMyComplaints(@Req() req: any) {
     return this.complaintsService.findMyComplaints(
       req.user.userId,
     );

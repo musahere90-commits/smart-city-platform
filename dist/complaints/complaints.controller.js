@@ -18,6 +18,7 @@ const swagger_1 = require("@nestjs/swagger");
 const complaints_service_1 = require("./complaints.service");
 const create_complaint_dto_1 = require("./dto/create-complaint.dto");
 const update_status_dto_1 = require("./dto/update-status.dto");
+const filter_complaints_dto_1 = require("./dto/filter-complaints.dto");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../auth/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
@@ -28,8 +29,8 @@ let ComplaintsController = class ComplaintsController {
     create(createComplaintDto, req) {
         return this.complaintsService.create(createComplaintDto, req.user.userId);
     }
-    findAll() {
-        return this.complaintsService.findAll();
+    findAll(filterDto) {
+        return this.complaintsService.filterComplaints(filterDto);
     }
     findMyComplaints(req) {
         return this.complaintsService.findMyComplaints(req.user.userId);
@@ -49,8 +50,9 @@ __decorate([
 ], ComplaintsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [filter_complaints_dto_1.FilterComplaintsDto]),
     __metadata("design:returntype", void 0)
 ], ComplaintsController.prototype, "findAll", null);
 __decorate([

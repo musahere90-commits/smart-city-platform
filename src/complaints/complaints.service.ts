@@ -11,6 +11,7 @@ import {
 } from './schemas/complaint.schema';
 
 import { CreateComplaintDto } from './dto/create-complaint.dto';
+import { FilterComplaintsDto } from './dto/filter-complaints.dto';
 
 @Injectable()
 export class ComplaintsService {
@@ -41,6 +42,46 @@ export class ComplaintsService {
       .exec();
   }
 
+  // Filter Complaints
+  async filterComplaints(
+    filterDto: FilterComplaintsDto,
+  ): Promise<Complaint[]> {
+    const { status } = filterDto;
+
+    if (status) {
+      return this.complaintModel
+        .find({ status })
+        .populate('userId')
+        .exec();
+    }
+
+    return this.complaintModel
+      .find()
+      .populate('userId')
+      .exec();
+  }
+
+  // Update Complaint Status
+  async updateStatus(
+    id: string,
+    status: string,
+  ): Promise<Complaint | null> {
+    const complaint =
+      await this.complaintModel.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true },
+      );
+
+    if (!complaint) {
+      throw new NotFoundException(
+        'Complaint not found',
+      );
+    }
+
+    return complaint;
+  }
+
   // Get Logged-in User Complaints
   async findMyComplaints(
     userId: string,
@@ -51,23 +92,5 @@ export class ComplaintsService {
       })
       .populate('userId')
       .exec();
-  }
-
-  // Update Complaint Status
-  async updateStatus(
-    id: string,
-    status: string,
-  ): Promise<Complaint | null> {
-    const complaint = await this.complaintModel.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true },
-    );
-
-    if (!complaint) {
-      throw new NotFoundException('Complaint not found');
-    }
-
-    return complaint;
   }
 }
