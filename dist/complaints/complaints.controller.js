@@ -31,6 +31,9 @@ let ComplaintsController = class ComplaintsController {
     findAll() {
         return this.complaintsService.findAll();
     }
+    findMyComplaints(req) {
+        return this.complaintsService.findMyComplaints(req.user.userId);
+    }
     updateStatus(id, updateStatusDto) {
         return this.complaintsService.updateStatus(id, updateStatusDto.status);
     }
@@ -50,6 +53,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ComplaintsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('my'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ComplaintsController.prototype, "findMyComplaints", null);
 __decorate([
     (0, common_1.Patch)(':id/status'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),

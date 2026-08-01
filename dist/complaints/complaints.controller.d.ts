@@ -6,5 +6,6 @@ export declare class ComplaintsController {
     constructor(complaintsService: ComplaintsService);
     create(createComplaintDto: CreateComplaintDto, req: any): Promise<import("./schemas/complaint.schema").Complaint>;
     findAll(): Promise<import("./schemas/complaint.schema").Complaint[]>;
+    findMyComplaints(req: any): Promise<import("./schemas/complaint.schema").Complaint[]>;
     updateStatus(id: string, updateStatusDto: UpdateStatusDto): Promise<import("./schemas/complaint.schema").Complaint | null>;
 }

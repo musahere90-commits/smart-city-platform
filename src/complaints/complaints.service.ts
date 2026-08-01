@@ -35,7 +35,22 @@ export class ComplaintsService {
 
   // Get All Complaints
   async findAll(): Promise<Complaint[]> {
-    return this.complaintModel.find().populate('userId').exec();
+    return this.complaintModel
+      .find()
+      .populate('userId')
+      .exec();
+  }
+
+  // Get Logged-in User Complaints
+  async findMyComplaints(
+    userId: string,
+  ): Promise<Complaint[]> {
+    return this.complaintModel
+      .find({
+        userId: new Types.ObjectId(userId),
+      })
+      .populate('userId')
+      .exec();
   }
 
   // Update Complaint Status

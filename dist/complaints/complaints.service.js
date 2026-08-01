@@ -30,7 +30,18 @@ let ComplaintsService = class ComplaintsService {
         return complaint.save();
     }
     async findAll() {
-        return this.complaintModel.find().populate('userId').exec();
+        return this.complaintModel
+            .find()
+            .populate('userId')
+            .exec();
+    }
+    async findMyComplaints(userId) {
+        return this.complaintModel
+            .find({
+            userId: new mongoose_2.Types.ObjectId(userId),
+        })
+            .populate('userId')
+            .exec();
     }
     async updateStatus(id, status) {
         const complaint = await this.complaintModel.findByIdAndUpdate(id, { status }, { new: true });

@@ -31,6 +31,7 @@ export class ComplaintsController {
     private readonly complaintsService: ComplaintsService,
   ) {}
 
+  // Create Complaint
   @Post()
   create(
     @Body() createComplaintDto: CreateComplaintDto,
@@ -42,11 +43,23 @@ export class ComplaintsController {
     );
   }
 
+  // Get All Complaints
   @Get()
   findAll() {
     return this.complaintsService.findAll();
   }
 
+  // Get Logged-in User Complaints
+  @Get('my')
+  findMyComplaints(
+    @Req() req: any,
+  ) {
+    return this.complaintsService.findMyComplaints(
+      req.user.userId,
+    );
+  }
+
+  // Update Complaint Status (Admin Only)
   @Patch(':id/status')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
