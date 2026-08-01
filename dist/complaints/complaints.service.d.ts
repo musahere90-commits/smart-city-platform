@@ -10,4 +10,7 @@ export declare class ComplaintsService {
     filterComplaints(filterDto: FilterComplaintsDto): Promise<Complaint[]>;
     updateStatus(id: string, status: string): Promise<Complaint | null>;
     findMyComplaints(userId: string): Promise<Complaint[]>;
+    deleteComplaint(id: string): Promise<{
+        message: string;
+    }>;
 }

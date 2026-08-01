@@ -63,6 +63,15 @@ let ComplaintsService = class ComplaintsService {
             .populate('userId')
             .exec();
     }
+    async deleteComplaint(id) {
+        const complaint = await this.complaintModel.findByIdAndDelete(id);
+        if (!complaint) {
+            throw new common_1.NotFoundException('Complaint not found');
+        }
+        return {
+            message: 'Complaint deleted successfully',
+        };
+    }
 };
 exports.ComplaintsService = ComplaintsService;
 exports.ComplaintsService = ComplaintsService = __decorate([

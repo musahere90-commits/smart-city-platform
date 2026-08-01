@@ -9,4 +9,7 @@ export declare class ComplaintsController {
     findAll(filterDto: FilterComplaintsDto): Promise<import("./schemas/complaint.schema").Complaint[]>;
     findMyComplaints(req: any): Promise<import("./schemas/complaint.schema").Complaint[]>;
     updateStatus(id: string, updateStatusDto: UpdateStatusDto): Promise<import("./schemas/complaint.schema").Complaint | null>;
+    deleteComplaint(id: string): Promise<{
+        message: string;
+    }>;
 }

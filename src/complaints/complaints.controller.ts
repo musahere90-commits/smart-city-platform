@@ -3,11 +3,12 @@ import {
   Post,
   Get,
   Patch,
+  Delete,
   Body,
+  Query,
   UseGuards,
   Req,
   Param,
-  Query,
 } from '@nestjs/common';
 
 import {
@@ -45,7 +46,7 @@ export class ComplaintsController {
     );
   }
 
-  // Get All Complaints (with optional status filter)
+  // Get All Complaints (with optional filter)
   @Get()
   findAll(
     @Query() filterDto: FilterComplaintsDto,
@@ -57,7 +58,9 @@ export class ComplaintsController {
 
   // Get Logged-in User Complaints
   @Get('my')
-  findMyComplaints(@Req() req: any) {
+  findMyComplaints(
+    @Req() req: any,
+  ) {
     return this.complaintsService.findMyComplaints(
       req.user.userId,
     );
@@ -74,6 +77,18 @@ export class ComplaintsController {
     return this.complaintsService.updateStatus(
       id,
       updateStatusDto.status,
+    );
+  }
+
+  // Delete Complaint (Admin Only)
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  deleteComplaint(
+    @Param('id') id: string,
+  ) {
+    return this.complaintsService.deleteComplaint(
+      id,
     );
   }
 }

@@ -38,6 +38,9 @@ let ComplaintsController = class ComplaintsController {
     updateStatus(id, updateStatusDto) {
         return this.complaintsService.updateStatus(id, updateStatusDto.status);
     }
+    deleteComplaint(id) {
+        return this.complaintsService.deleteComplaint(id);
+    }
 };
 exports.ComplaintsController = ComplaintsController;
 __decorate([
@@ -72,6 +75,15 @@ __decorate([
     __metadata("design:paramtypes", [String, update_status_dto_1.UpdateStatusDto]),
     __metadata("design:returntype", void 0)
 ], ComplaintsController.prototype, "updateStatus", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ComplaintsController.prototype, "deleteComplaint", null);
 exports.ComplaintsController = ComplaintsController = __decorate([
     (0, swagger_1.ApiTags)('Complaints'),
     (0, swagger_1.ApiBearerAuth)('JWT-auth'),

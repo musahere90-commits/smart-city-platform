@@ -93,4 +93,22 @@ export class ComplaintsService {
       .populate('userId')
       .exec();
   }
+
+  // Delete Complaint
+  async deleteComplaint(
+    id: string,
+  ): Promise<{ message: string }> {
+    const complaint =
+      await this.complaintModel.findByIdAndDelete(id);
+
+    if (!complaint) {
+      throw new NotFoundException(
+        'Complaint not found',
+      );
+    }
+
+    return {
+      message: 'Complaint deleted successfully',
+    };
+  }
 }
