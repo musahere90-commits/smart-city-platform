@@ -111,4 +111,26 @@ export class ComplaintsService {
       message: 'Complaint deleted successfully',
     };
   }
+
+  // Complaint Statistics
+  async getStatistics() {
+    const totalComplaints =
+      await this.complaintModel.countDocuments();
+
+    const pending =
+      await this.complaintModel.countDocuments({
+        status: 'Pending',
+      });
+
+    const resolved =
+      await this.complaintModel.countDocuments({
+        status: 'Resolved',
+      });
+
+    return {
+      totalComplaints,
+      pending,
+      resolved,
+    };
+  }
 }

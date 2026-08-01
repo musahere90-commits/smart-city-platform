@@ -8,6 +8,11 @@ export declare class ComplaintsController {
     create(createComplaintDto: CreateComplaintDto, req: any): Promise<import("./schemas/complaint.schema").Complaint>;
     findAll(filterDto: FilterComplaintsDto): Promise<import("./schemas/complaint.schema").Complaint[]>;
     findMyComplaints(req: any): Promise<import("./schemas/complaint.schema").Complaint[]>;
+    getStatistics(): Promise<{
+        totalComplaints: number;
+        pending: number;
+        resolved: number;
+    }>;
     updateStatus(id: string, updateStatusDto: UpdateStatusDto): Promise<import("./schemas/complaint.schema").Complaint | null>;
     deleteComplaint(id: string): Promise<{
         message: string;

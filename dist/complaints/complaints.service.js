@@ -72,6 +72,20 @@ let ComplaintsService = class ComplaintsService {
             message: 'Complaint deleted successfully',
         };
     }
+    async getStatistics() {
+        const totalComplaints = await this.complaintModel.countDocuments();
+        const pending = await this.complaintModel.countDocuments({
+            status: 'Pending',
+        });
+        const resolved = await this.complaintModel.countDocuments({
+            status: 'Resolved',
+        });
+        return {
+            totalComplaints,
+            pending,
+            resolved,
+        };
+    }
 };
 exports.ComplaintsService = ComplaintsService;
 exports.ComplaintsService = ComplaintsService = __decorate([

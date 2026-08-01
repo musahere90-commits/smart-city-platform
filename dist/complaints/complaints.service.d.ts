@@ -13,4 +13,9 @@ export declare class ComplaintsService {
     deleteComplaint(id: string): Promise<{
         message: string;
     }>;
+    getStatistics(): Promise<{
+        totalComplaints: number;
+        pending: number;
+        resolved: number;
+    }>;
 }
